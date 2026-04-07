@@ -83,6 +83,42 @@ export type Database = {
         }
         Relationships: []
       }
+      schedules: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string
+          id: string
+          location: string
+          status: string
+          time_slot: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date: string
+          id?: string
+          location?: string
+          status?: string
+          time_slot?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string
+          id?: string
+          location?: string
+          status?: string
+          time_slot?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
