@@ -6,57 +6,37 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface KathaBooking {
+interface ScheduleEvent {
   id: string;
   title: string;
   description: string | null;
   event_date: string;
+  time_slot: string | null;
   location: string;
   status: string;
 }
 
-const fallbackEvents = [
-  {
-    id: "1",
-    location: "Vrindavan",
-    event_date: "2025-12-15",
-    title: "Shrimad Bhagavat Katha",
-    description: "7-day spiritual journey through the divine stories of Lord Krishna",
-    status: "upcoming",
-  },
-  {
-    id: "2",
-    location: "Vrindavan",
-    event_date: "2025-12-22",
-    title: "Shrimad Bhagavat Katha",
-    description: "Experience divine love and wisdom through Krishna's eternal stories",
-    status: "upcoming",
-  },
-  {
-    id: "3",
-    location: "Vrindavan",
-    event_date: "2026-01-05",
-    title: "Shrimad Bhagavat Katha",
-    description: "New Year special katha for spiritual renewal",
-    status: "upcoming",
-  },
+const fallbackEvents: ScheduleEvent[] = [
+  { id: "1", location: "Vrindavan, Uttar Pradesh", event_date: "2026-05-15", time_slot: "6:00 AM - 8:00 AM", title: "Morning Bhagavat Katha", description: "Start your day with divine stories of Lord Krishna", status: "upcoming" },
+  { id: "2", location: "Vrindavan, Uttar Pradesh", event_date: "2026-05-22", time_slot: "5:00 PM - 7:00 PM", title: "Evening Satsang", description: "Devotional singing and spiritual discourse", status: "upcoming" },
+  { id: "3", location: "Vrindavan, Uttar Pradesh", event_date: "2026-06-01", time_slot: "9:00 AM - 12:00 PM", title: "Special Katha Event", description: "Extended katha session for special occasion", status: "upcoming" },
 ];
 
 const SchedulePage = () => {
-  const [events, setEvents] = useState<KathaBooking[]>([]);
+  const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
       const { data, error } = await supabase
-        .from("katha_bookings")
+        .from("schedules")
         .select("*")
         .order("event_date", { ascending: true });
 
       if (error || !data?.length) {
         setEvents(fallbackEvents);
       } else {
-        setEvents(data);
+        setEvents(data as ScheduleEvent[]);
       }
       setLoading(false);
     };
@@ -67,14 +47,17 @@ const SchedulePage = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      <section className="pt-28 pb-24 bg-hero-gradient">
-        <div className="container mx-auto px-4">
+      <section className="pt-28 pb-24 bg-hero-gradient relative overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-primary blur-3xl" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <AnimatedSection>
             <h1 className="text-4xl md:text-6xl font-heading font-bold text-center">
-              Upcoming <span className="text-gradient-saffron">Bhagavat Kathas</span>
+              Event <span className="text-gradient-saffron">Schedule</span>
             </h1>
             <p className="text-center text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-              Join us for transformative spiritual experiences
+              Join us for transformative spiritual experiences in Vrindavan
             </p>
           </AnimatedSection>
         </div>
@@ -102,32 +85,26 @@ const SchedulePage = () => {
                     className="bg-background rounded-3xl p-8 border border-border/30 hover:shadow-xl transition-shadow relative overflow-hidden group"
                   >
                     <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-3xl" />
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground mb-5">
+                    <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-5">
                       <span className="flex items-center gap-1.5 bg-primary/10 px-3 py-1 rounded-full">
                         <MapPin className="w-3.5 h-3.5 text-primary" />
                         {event.location}
                       </span>
                       <span className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-primary" />
-                        {new Date(event.event_date).toLocaleDateString("en-IN", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
+                        {new Date(event.event_date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                       </span>
+                      {event.time_slot && (
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-primary" />
+                          {event.time_slot}
+                        </span>
+                      )}
                     </div>
-                    <h3 className="text-xl font-heading font-bold text-foreground mb-3">
-                      {event.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {event.description}
-                    </p>
+                    <h3 className="text-xl font-heading font-bold text-foreground mb-3">{event.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{event.description}</p>
                     <div className="mt-5">
-                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                        event.status === "upcoming"
-                          ? "bg-primary/10 text-primary"
-                          : "bg-muted text-muted-foreground"
-                      }`}>
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${event.status === "upcoming" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
                         {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
                       </span>
                     </div>

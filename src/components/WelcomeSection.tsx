@@ -1,5 +1,7 @@
+import krishnaImg from "@/assets/krishna-cute.png";
 import swamiImg from "@/assets/swami-photo.jpg";
 import AnimatedSection from "./AnimatedSection";
+import { motion } from "framer-motion";
 
 const stats = [
   { value: "25+", label: "Years Experience" },
@@ -10,7 +12,6 @@ const stats = [
 const WelcomeSection = () => {
   return (
     <section className="py-24 bg-card relative overflow-hidden">
-      {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-10 left-10 w-72 h-72 rounded-full bg-primary blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-secondary blur-3xl" />
@@ -18,9 +19,21 @@ const WelcomeSection = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         <AnimatedSection>
-          <h2 className="text-3xl md:text-5xl font-heading font-bold text-center text-foreground mb-4">
-            Welcome to <span className="text-gradient-saffron">Divine Wisdom</span>
-          </h2>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <motion.img
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              src={krishnaImg}
+              alt="Krishna"
+              loading="lazy"
+              width={48}
+              height={48}
+              className="w-12 h-12"
+            />
+            <h2 className="text-3xl md:text-5xl font-heading font-bold text-center text-foreground">
+              Welcome to <span className="text-gradient-saffron">Divine Wisdom</span>
+            </h2>
+          </div>
         </AnimatedSection>
 
         <div className="mt-16 grid lg:grid-cols-2 gap-16 items-center">
@@ -32,18 +45,21 @@ const WelcomeSection = () => {
             </p>
             <p className="mt-4 text-foreground/70 text-lg leading-relaxed">
               Join thousands of devotees who have found peace, purpose, and spiritual awakening
-              through his sacred teachings in the holy land of Vrindavan.
+              through his sacred teachings in the holy land of Vrindavan, Uttar Pradesh.
             </p>
 
             <div className="mt-12 grid grid-cols-3 gap-6">
               {stats.map((stat, i) => (
                 <AnimatedSection key={stat.label} delay={i * 0.15}>
-                  <div className="text-center p-4 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/30">
+                  <motion.div
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    className="text-center p-4 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/30 shadow-md"
+                  >
                     <div className="text-3xl md:text-4xl font-heading font-bold text-primary">
                       {stat.value}
                     </div>
                     <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-                  </div>
+                  </motion.div>
                 </AnimatedSection>
               ))}
             </div>
