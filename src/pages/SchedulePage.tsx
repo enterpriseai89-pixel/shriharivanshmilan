@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
-import { MapPin, Clock, Calendar } from "lucide-react";
+import { MapPin, Clock, Calendar, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,28 +16,17 @@ interface ScheduleEvent {
   status: string;
 }
 
-const fallbackEvents: ScheduleEvent[] = [
-  { id: "1", location: "Vrindavan, Uttar Pradesh", event_date: "2026-05-15", time_slot: "6:00 AM - 8:00 AM", title: "Morning Bhagavat Katha", description: "Start your day with divine stories of Lord Krishna", status: "upcoming" },
-  { id: "2", location: "Vrindavan, Uttar Pradesh", event_date: "2026-05-22", time_slot: "5:00 PM - 7:00 PM", title: "Evening Satsang", description: "Devotional singing and spiritual discourse", status: "upcoming" },
-  { id: "3", location: "Vrindavan, Uttar Pradesh", event_date: "2026-06-01", time_slot: "9:00 AM - 12:00 PM", title: "Special Katha Event", description: "Extended katha session for special occasion", status: "upcoming" },
-];
-
 const SchedulePage = () => {
   const [events, setEvents] = useState<ScheduleEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("schedules")
         .select("*")
         .order("event_date", { ascending: true });
-
-      if (error || !data?.length) {
-        setEvents(fallbackEvents);
-      } else {
-        setEvents(data as ScheduleEvent[]);
-      }
+      setEvents((data as ScheduleEvent[]) || []);
       setLoading(false);
     };
     fetchEvents();
@@ -47,10 +36,7 @@ const SchedulePage = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      <section className="pt-28 pb-24 bg-hero-gradient relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-primary blur-3xl" />
-        </div>
+      <section className="pt-28 pb-16 bg-hero-gradient relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <AnimatedSection>
             <h1 className="text-4xl md:text-6xl font-heading font-bold text-center">
@@ -75,6 +61,24 @@ const SchedulePage = () => {
                 </div>
               ))}
             </div>
+          ) : events.length === 0 ? (
+            <AnimatedSection>
+              <div className="text-center py-24">
+                <motion.div
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="inline-block mb-6"
+                >
+                  <div className="w-24 h-24 rounded-full bg-primary/5 flex items-center justify-center mx-auto">
+                    <Sparkles className="w-10 h-10 text-primary/40" />
+                  </div>
+                </motion.div>
+                <h3 className="text-2xl font-heading font-bold text-foreground/60 mb-3">No Events Scheduled Yet</h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  New katha events and spiritual gatherings will be announced here. Stay tuned for upcoming schedules from Vrindavan.
+                </p>
+              </div>
+            </AnimatedSection>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.map((event, i) => (

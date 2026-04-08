@@ -1,18 +1,38 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import Scene3D from "./Scene3D";
 import krishnaImg from "@/assets/krishna-cute.png";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen bg-hero-gradient overflow-hidden flex items-center pt-16">
-      {/* 3D Background */}
-      <div className="absolute inset-0 z-0">
-        <Scene3D className="w-full h-full opacity-30" />
+      {/* Subtle animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full opacity-[0.04]"
+            style={{
+              width: 200 + i * 80,
+              height: 200 + i * 80,
+              background: `radial-gradient(circle, hsl(25 95% 53%) 0%, transparent 70%)`,
+              left: `${15 + i * 12}%`,
+              top: `${10 + i * 10}%`,
+            }}
+            animate={{
+              y: [0, -20, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 6 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5,
+            }}
+          />
+        ))}
       </div>
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80 z-[1]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/20 to-transparent z-[1]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
