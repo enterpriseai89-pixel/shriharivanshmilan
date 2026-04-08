@@ -44,8 +44,8 @@ const HeroSection = () => {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium backdrop-blur-sm border border-primary/20">
-                🙏 Hare Krishna · Radhe Radhe
+              <span className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold backdrop-blur-sm border border-primary/20 shadow-lg shadow-primary/10">
+                Hare Krishna · Radhe Radhe
               </span>
             </motion.div>
 

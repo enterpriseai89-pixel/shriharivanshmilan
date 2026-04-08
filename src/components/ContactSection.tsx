@@ -1,4 +1,7 @@
-import { MapPin, Clock, Phone, Youtube } from "lucide-react";
+import { Phone, Youtube } from "lucide-react";
+import vrindavanImg from "@/assets/vrindavan-temple.jpg";
+import templeTimeImg from "@/assets/temple-time.jpg";
+import prayerImg from "@/assets/prayer-hands.jpg";
 
 const ContactSection = () => {
   return (
@@ -13,76 +16,68 @@ const ContactSection = () => {
         </p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Location */}
-          <div className="bg-card rounded-2xl p-8 border border-border/50">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
-              <MapPin className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-heading font-bold text-foreground mb-3">
-              Our Sacred Location
-            </h3>
-            <p className="text-muted-foreground">
-              Radha Keli Kunj, Vrindavan, Uttar Pradesh
-            </p>
-            <p className="text-sm text-muted-foreground mt-3">
-              Experience the divine atmosphere of our sacred space where spiritual seekers gather
-              for wisdom and enlightenment.
-            </p>
-          </div>
+          {[
+            {
+              img: vrindavanImg,
+              title: "Our Sacred Location",
+              content: "Vrindavan, Uttar Pradesh",
+              sub: "Experience the divine atmosphere of our sacred space where spiritual seekers gather for wisdom and enlightenment.",
+            },
+            {
+              img: templeTimeImg,
+              title: "Office Hours",
+              content: "Monday - Saturday: 9:00 AM - 6:00 PM",
+              sub: "Morning: 6-8 AM | Evening: 5-7 PM",
+            },
+            {
+              img: prayerImg,
+              title: "Ready to Connect?",
+              content: "+91 9430880950",
+              sub: "Book your spiritual session today",
+              isContact: true,
+            },
+          ].map((item) => (
+            <div key={item.title} className="bg-card rounded-2xl overflow-hidden border border-border/50">
+              <div className="relative h-40 overflow-hidden">
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  loading="lazy"
+                  width={640}
+                  height={512}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+              </div>
+              <div className="p-8">
+                <h3 className="text-xl font-heading font-bold text-foreground mb-3">{item.title}</h3>
+                <p className="text-muted-foreground">{item.content}</p>
+                <p className="text-sm text-muted-foreground mt-3">{item.sub}</p>
 
-          {/* Hours */}
-          <div className="bg-card rounded-2xl p-8 border border-border/50">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
-              <Clock className="w-6 h-6 text-primary" />
+                {item.isContact && (
+                  <div className="mt-4 space-y-3">
+                    <a
+                      href="tel:+919430880950"
+                      className="flex items-center gap-2 bg-cta-gradient text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold justify-center hover:opacity-90 transition-opacity"
+                    >
+                      <Phone className="w-4 h-4" />
+                      Call Now
+                    </a>
+                    <a
+                      href="https://wa.me/919430880950?text=Hello!%20I%20would%20like%20to%20book%20a%20Bhagavat%20Katha%20session."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 border-2 border-primary text-primary px-5 py-2.5 rounded-full text-sm font-semibold justify-center hover:bg-primary/5 transition-colors"
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
-            <h3 className="text-xl font-heading font-bold text-foreground mb-3">Office Hours</h3>
-            <p className="text-muted-foreground">Monday - Saturday: 9:00 AM - 6:00 PM</p>
-            <div className="mt-3 space-y-1 text-sm text-muted-foreground">
-              <p>
-                <span className="font-medium text-foreground">Morning Sessions:</span> 6:00 AM - 8:00 AM
-              </p>
-              <p>
-                <span className="font-medium text-foreground">Evening Sessions:</span> 5:00 PM - 7:00 PM
-              </p>
-            </div>
-          </div>
-
-          {/* Online / Contact */}
-          <div className="bg-card rounded-2xl p-8 border border-border/50">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5">
-              <Phone className="w-6 h-6 text-primary" />
-            </div>
-            <h3 className="text-xl font-heading font-bold text-foreground mb-3">
-              Ready to Connect?
-            </h3>
-            <p className="text-muted-foreground mb-4">Book your spiritual session today</p>
-
-            <div className="space-y-3">
-              <a
-                href="tel:+919430880950"
-                className="flex items-center gap-2 bg-cta-gradient text-primary-foreground px-5 py-2.5 rounded-full text-sm font-semibold justify-center hover:opacity-90 transition-opacity"
-              >
-                <Phone className="w-4 h-4" />
-                Call Now
-              </a>
-              <a
-                href="https://wa.me/919430880950?text=Hello!%20I%20would%20like%20to%20book%20a%20Bhagavat%20Katha%20session."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 border-2 border-primary text-primary px-5 py-2.5 rounded-full text-sm font-semibold justify-center hover:bg-primary/5 transition-colors"
-              >
-                WhatsApp
-              </a>
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-border/50">
-              <p className="text-xs text-muted-foreground mb-1">Direct Contact</p>
-              <p className="font-semibold text-foreground">+91 9430880950</p>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* YouTube */}
         <div className="mt-8 text-center">
           <a
             href="http://www.youtube.com/@GuneshanandaMilan"
