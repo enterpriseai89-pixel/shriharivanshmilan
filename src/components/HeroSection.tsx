@@ -44,8 +44,8 @@ const HeroSection = () => {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium backdrop-blur-sm border border-primary/20">
-                🙏 Hare Krishna · Radhe Radhe
+              <span className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold backdrop-blur-sm border border-primary/20 shadow-lg shadow-primary/10">
+                Hare Krishna · Radhe Radhe
               </span>
             </motion.div>
 
@@ -100,16 +100,28 @@ const HeroSection = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
             className="flex-shrink-0"
+            style={{ perspective: "600px" }}
           >
-            <motion.img
-              animate={{ y: [0, -15, 0] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              src={krishnaImg}
-              alt="Lord Krishna"
-              width={280}
-              height={280}
-              className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 drop-shadow-2xl"
-            />
+            <motion.div
+              animate={{ 
+                y: [0, -15, 0],
+                rotateY: [0, 8, -8, 0],
+                rotateX: [0, 4, -4, 0],
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              <img
+                src={krishnaImg}
+                alt="Lord Krishna"
+                width={280}
+                height={280}
+                className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72"
+                style={{
+                  filter: "drop-shadow(0 20px 40px rgba(0,0,0,0.3)) drop-shadow(0 0 60px hsl(25 95% 53% / 0.2))",
+                }}
+              />
+            </motion.div>
           </motion.div>
         </div>
       </div>

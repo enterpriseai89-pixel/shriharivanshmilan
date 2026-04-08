@@ -1,8 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
-import { MapPin, Clock, Phone, Youtube } from "lucide-react";
+import { Phone, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
+import vrindavanImg from "@/assets/vrindavan-temple.jpg";
+import templeTimeImg from "@/assets/temple-time.jpg";
+import prayerImg from "@/assets/prayer-hands.jpg";
 
 const ContactPage = () => {
   return (
@@ -27,35 +30,42 @@ const ContactPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: MapPin,
+                img: vrindavanImg,
                 title: "Our Sacred Location",
-                content: "Radha Keli Kunj, Vrindavan, Uttar Pradesh",
+                content: "Vrindavan, Uttar Pradesh",
                 sub: "Experience the divine atmosphere of our sacred space.",
               },
               {
-                icon: Clock,
+                img: templeTimeImg,
                 title: "Office Hours",
                 content: "Monday - Saturday: 9:00 AM - 6:00 PM",
                 sub: "Morning: 6-8 AM | Evening: 5-7 PM",
               },
               {
-                icon: Phone,
+                img: prayerImg,
                 title: "Ready to Connect?",
                 content: "+91 9430880950",
                 sub: "Book your spiritual session today",
                 isContact: true,
               },
-            ].map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <AnimatedSection key={item.title} delay={i * 0.1}>
-                  <motion.div
-                    whileHover={{ y: -6 }}
-                    className="bg-background rounded-3xl p-8 border border-border/30 shadow-lg h-full"
-                  >
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
-                      <Icon className="w-7 h-7 text-primary" />
-                    </div>
+            ].map((item, i) => (
+              <AnimatedSection key={item.title} delay={i * 0.1}>
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  className="bg-background rounded-3xl overflow-hidden border border-border/30 shadow-lg h-full"
+                >
+                  <div className="relative h-44 overflow-hidden">
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      loading="lazy"
+                      width={640}
+                      height={512}
+                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                  </div>
+                  <div className="p-6">
                     <h3 className="text-xl font-heading font-bold text-foreground mb-3">{item.title}</h3>
                     <p className="text-foreground/80 font-medium">{item.content}</p>
                     <p className="text-sm text-muted-foreground mt-2">{item.sub}</p>
@@ -79,10 +89,10 @@ const ContactPage = () => {
                         </a>
                       </div>
                     )}
-                  </motion.div>
-                </AnimatedSection>
-              );
-            })}
+                  </div>
+                </motion.div>
+              </AnimatedSection>
+            ))}
           </div>
 
           <AnimatedSection className="mt-12 text-center">
