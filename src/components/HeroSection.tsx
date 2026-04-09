@@ -1,38 +1,52 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import krishnaImg from "@/assets/krishna-cute.png";
+import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen bg-hero-gradient overflow-hidden flex items-center pt-16">
-      {/* Subtle animated background elements */}
+    <section className="relative min-h-screen overflow-hidden flex items-center pt-16">
+      {/* Full background image */}
+      <div className="absolute inset-0">
+        <img
+          src={heroBg}
+          alt=""
+          width={1920}
+          height={1080}
+          className="w-full h-full object-cover"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
+      </div>
+
+      {/* Animated light particles */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 12 }).map((_, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full opacity-[0.04]"
+            className="absolute rounded-full"
             style={{
-              width: 200 + i * 80,
-              height: 200 + i * 80,
-              background: `radial-gradient(circle, hsl(25 95% 53%) 0%, transparent 70%)`,
-              left: `${15 + i * 12}%`,
-              top: `${10 + i * 10}%`,
+              width: 4 + Math.random() * 6,
+              height: 4 + Math.random() * 6,
+              background: i % 2 === 0 ? "hsl(43 96% 56% / 0.6)" : "hsl(25 95% 53% / 0.5)",
+              left: `${10 + Math.random() * 80}%`,
+              top: `${10 + Math.random() * 80}%`,
             }}
             animate={{
-              y: [0, -20, 0],
-              scale: [1, 1.05, 1],
+              y: [0, -30, 0],
+              opacity: [0, 1, 0],
+              scale: [0.5, 1.5, 0.5],
             }}
             transition={{
-              duration: 6 + i,
+              duration: 4 + Math.random() * 3,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5,
+              delay: Math.random() * 3,
             }}
           />
         ))}
       </div>
-
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80 z-[1]" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
