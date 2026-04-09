@@ -1,7 +1,9 @@
 import krishnaImg from "@/assets/krishna-cute.png";
 import swamiImg from "@/assets/swami-photo.jpg";
+import welcomeBg from "@/assets/welcome-bg.jpg";
 import AnimatedSection from "./AnimatedSection";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const stats = [
   { value: "25+", label: "Years Experience" },
@@ -10,11 +12,56 @@ const stats = [
 ];
 
 const WelcomeSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
   return (
-    <section className="py-24 bg-card relative overflow-hidden">
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 left-10 w-72 h-72 rounded-full bg-primary blur-3xl" />
-        <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-secondary blur-3xl" />
+    <section ref={sectionRef} className="py-24 relative overflow-hidden">
+      {/* Parallax background */}
+      <motion.div className="absolute inset-0 -top-20 -bottom-20" style={{ y: bgY }}>
+        <img
+          src={welcomeBg}
+          alt=""
+          loading="lazy"
+          width={1920}
+          height={1080}
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
+      <div className="absolute inset-0 bg-background/85 backdrop-blur-[2px]" />
+
+      {/* Interactive floating orbs */}
+      <div className="absolute inset-0 overflow-hidden">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: 80 + i * 40,
+              height: 80 + i * 40,
+              background: i % 2 === 0
+                ? "radial-gradient(circle, hsl(25 95% 53% / 0.08) 0%, transparent 70%)"
+                : "radial-gradient(circle, hsl(43 96% 56% / 0.06) 0%, transparent 70%)",
+              left: `${5 + i * 12}%`,
+              top: `${10 + (i % 3) * 25}%`,
+            }}
+            animate={{
+              y: [0, -30 - i * 5, 0],
+              x: [0, 10 + i * 3, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 5 + i * 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.4,
+            }}
+          />
+        ))}
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
@@ -39,7 +86,7 @@ const WelcomeSection = () => {
         <div className="mt-16 grid lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection direction="left">
             <p className="text-foreground/70 text-lg leading-relaxed">
-              Swami Guneshananda Maharaj brings decades of spiritual wisdom and devotion to guide
+              Swami Guneshananda Ji brings decades of spiritual wisdom and devotion to guide
               souls on their divine journey. Through his enlightening Bhagavat Katha, experience the
               profound teachings that transform hearts and minds.
             </p>
@@ -53,7 +100,7 @@ const WelcomeSection = () => {
                 <AnimatedSection key={stat.label} delay={i * 0.15}>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -4 }}
-                    className="text-center p-4 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/30 shadow-md"
+                    className="text-center p-4 rounded-2xl bg-card/80 backdrop-blur-md border border-border/30 shadow-lg"
                   >
                     <div className="text-3xl md:text-4xl font-heading font-bold text-primary">
                       {stat.value}
