@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
+import PageTransition from "@/components/PageTransition";
 import { MapPin, Calendar, Phone, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -32,6 +33,7 @@ const KathaPage = () => {
   }, []);
 
   return (
+    <PageTransition>
     <div className="min-h-screen">
       <Navbar />
 
@@ -142,6 +144,7 @@ const KathaPage = () => {
 
       <Footer />
     </div>
+    </PageTransition>
   );
 };
 

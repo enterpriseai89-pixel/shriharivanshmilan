@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
+import PageTransition from "@/components/PageTransition";
 import { MapPin, Clock, Calendar, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -33,6 +34,7 @@ const SchedulePage = () => {
   }, []);
 
   return (
+    <PageTransition>
     <div className="min-h-screen">
       <Navbar />
 
@@ -122,6 +124,7 @@ const SchedulePage = () => {
 
       <Footer />
     </div>
+    </PageTransition>
   );
 };
 
