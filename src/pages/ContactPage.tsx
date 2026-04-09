@@ -10,6 +10,7 @@ import prayerImg from "@/assets/prayer-hands.jpg";
 
 const ContactPage = () => {
   return (
+    <PageTransition>
     <div className="min-h-screen">
       <Navbar />
 
