@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
+import PageTransition from "@/components/PageTransition";
 import { Phone, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import vrindavanImg from "@/assets/vrindavan-temple.jpg";
@@ -111,6 +112,7 @@ const ContactPage = () => {
 
       <Footer />
     </div>
+    </PageTransition>
   );
 };
 
