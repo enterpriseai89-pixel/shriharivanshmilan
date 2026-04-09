@@ -43,7 +43,7 @@ const Navbar = () => {
           </div>
           <div>
             <h2 className="font-heading text-lg font-bold text-primary leading-tight">
-              Swami Guneshananda
+              Guneshananda Ji
             </h2>
             <p className="text-xs text-muted-foreground">Maharaj</p>
           </div>
