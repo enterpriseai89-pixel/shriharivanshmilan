@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
+import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Plus, Trash2, Edit2, LogIn, LogOut, Calendar, FileText, Video, Music, Clock } from "lucide-react";
@@ -256,6 +257,7 @@ const AdminPage = () => {
   }
 
   return (
+    <PageTransition>
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="pt-28 pb-24">
@@ -446,6 +448,7 @@ const AdminPage = () => {
       </div>
       <Footer />
     </div>
+    </PageTransition>
   );
 };
 

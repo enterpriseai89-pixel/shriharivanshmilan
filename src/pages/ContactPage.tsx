@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
+import PageTransition from "@/components/PageTransition";
 import { Phone, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 import vrindavanImg from "@/assets/vrindavan-temple.jpg";
@@ -9,6 +10,7 @@ import prayerImg from "@/assets/prayer-hands.jpg";
 
 const ContactPage = () => {
   return (
+    <PageTransition>
     <div className="min-h-screen">
       <Navbar />
 
@@ -111,6 +113,7 @@ const ContactPage = () => {
 
       <Footer />
     </div>
+    </PageTransition>
   );
 };
 

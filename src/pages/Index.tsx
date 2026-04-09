@@ -7,6 +7,7 @@ import UpcomingEvents from "@/components/UpcomingEvents";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import SplashScreen from "@/components/SplashScreen";
+import PageTransition from "@/components/PageTransition";
 
 const Index = () => {
   const [splashDone, setSplashDone] = useState(false);
@@ -14,15 +15,17 @@ const Index = () => {
   return (
     <>
       {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
-      <div className="min-h-screen">
-        <Navbar />
-        <HeroSection />
-        <WelcomeSection />
-        <KathaExperience />
-        <UpcomingEvents />
-        <CTASection />
-        <Footer />
-      </div>
+      <PageTransition>
+        <div className="min-h-screen">
+          <Navbar />
+          <HeroSection />
+          <WelcomeSection />
+          <KathaExperience />
+          <UpcomingEvents />
+          <CTASection />
+          <Footer />
+        </div>
+      </PageTransition>
     </>
   );
 };

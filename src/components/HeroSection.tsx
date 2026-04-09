@@ -57,7 +57,7 @@ const HeroSection = () => {
             >
               <span className="text-gradient-saffron">Swami</span>
               <br />
-              <span className="text-gradient-saffron">Guneshananda</span>
+              <span className="text-gradient-saffron">Guneshananda Ji</span>
               <br />
               <span className="text-foreground/80">Maharaj</span>
             </motion.h1>

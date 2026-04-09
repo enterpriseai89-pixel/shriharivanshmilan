@@ -105,7 +105,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              Swami Guneshananda
+              Guneshananda Ji
             </motion.h1>
 
             <motion.p

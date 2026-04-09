@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
+import PageTransition from "@/components/PageTransition";
 import { FileText, Video, Music, ExternalLink, Play, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -47,6 +48,7 @@ const ResourcesPage = () => {
   };
 
   return (
+    <PageTransition>
     <div className="min-h-screen">
       <Navbar />
 
@@ -174,6 +176,7 @@ const ResourcesPage = () => {
 
       <Footer />
     </div>
+    </PageTransition>
   );
 };
 
