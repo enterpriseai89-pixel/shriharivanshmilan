@@ -1,13 +1,23 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import krishnaImg from "@/assets/krishna-cute.png";
 import heroBg from "@/assets/hero-bg.jpg";
+import { useRef } from "react";
 
 const HeroSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
+
   return (
-    <section className="relative min-h-screen overflow-hidden flex items-center pt-16">
-      {/* Full background image */}
-      <div className="absolute inset-0">
+    <section ref={sectionRef} className="relative min-h-screen overflow-hidden flex items-center pt-16">
+      {/* Parallax background image */}
+      <motion.div className="absolute inset-0 -top-10 -bottom-10" style={{ y: bgY, scale: bgScale }}>
         <img
           src={heroBg}
           alt=""
@@ -15,40 +25,44 @@ const HeroSection = () => {
           height={1080}
           className="w-full h-full object-cover"
         />
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
-      </div>
+      </motion.div>
+      {/* Overlay gradients */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/65 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/20" />
 
-      {/* Animated light particles */}
+      {/* Floating golden particles */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 12 }).map((_, i) => (
+        {Array.from({ length: 18 }).map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: 4 + Math.random() * 6,
-              height: 4 + Math.random() * 6,
-              background: i % 2 === 0 ? "hsl(43 96% 56% / 0.6)" : "hsl(25 95% 53% / 0.5)",
-              left: `${10 + Math.random() * 80}%`,
-              top: `${10 + Math.random() * 80}%`,
+              width: 3 + Math.random() * 6,
+              height: 3 + Math.random() * 6,
+              background: i % 3 === 0
+                ? "hsl(43 96% 56% / 0.7)"
+                : i % 3 === 1
+                ? "hsl(25 95% 53% / 0.5)"
+                : "hsl(340 80% 58% / 0.4)",
+              left: `${5 + Math.random() * 90}%`,
+              top: `${5 + Math.random() * 90}%`,
             }}
             animate={{
-              y: [0, -30, 0],
+              y: [0, -50, 0],
               opacity: [0, 1, 0],
-              scale: [0.5, 1.5, 0.5],
+              scale: [0.3, 1.8, 0.3],
             }}
             transition={{
-              duration: 4 + Math.random() * 3,
+              duration: 4 + Math.random() * 4,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: Math.random() * 3,
+              delay: Math.random() * 5,
             }}
           />
         ))}
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <motion.div className="container mx-auto px-4 relative z-10" style={{ y: textY }}>
         <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           {/* Text */}
           <div className="flex-1 text-center lg:text-left">
@@ -58,7 +72,7 @@ const HeroSection = () => {
               transition={{ duration: 0.8 }}
               className="mb-6"
             >
-              <span className="inline-block px-5 py-2 rounded-full bg-primary/10 text-primary text-sm font-semibold backdrop-blur-sm border border-primary/20 shadow-lg shadow-primary/10">
+              <span className="inline-block px-5 py-2 rounded-full bg-primary/15 text-primary text-sm font-semibold backdrop-blur-md border border-primary/20 shadow-lg shadow-primary/10">
                 Hare Krishna · Radhe Radhe
               </span>
             </motion.div>
@@ -117,7 +131,7 @@ const HeroSection = () => {
             style={{ perspective: "600px" }}
           >
             <motion.div
-              animate={{ 
+              animate={{
                 y: [0, -15, 0],
                 rotateY: [0, 8, -8, 0],
                 rotateX: [0, 4, -4, 0],
@@ -138,7 +152,7 @@ const HeroSection = () => {
             </motion.div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

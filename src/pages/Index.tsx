@@ -8,6 +8,7 @@ import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
 import SplashScreen from "@/components/SplashScreen";
 import PageTransition from "@/components/PageTransition";
+import BhagwaMouseTrail from "@/components/BhagwaMouseTrail";
 
 const Index = () => {
   const [splashDone, setSplashDone] = useState(false);
@@ -15,6 +16,7 @@ const Index = () => {
   return (
     <>
       {!splashDone && <SplashScreen onComplete={() => setSplashDone(true)} />}
+      <BhagwaMouseTrail />
       <PageTransition>
         <div className="min-h-screen">
           <Navbar />
