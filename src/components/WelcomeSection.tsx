@@ -117,7 +117,7 @@ const WelcomeSection = () => {
               <div className="rounded-3xl overflow-hidden shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
                 <img
                   src={swamiImg}
-                  alt="Swami Guneshananda Maharaj"
+                  alt="Swami Guneshananda Ji Maharaj"
                   loading="lazy"
                   width={640}
                   height={800}

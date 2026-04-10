@@ -31,7 +31,7 @@ const Footer = () => {
               </div>
               <div>
                 <h3 className="font-heading text-lg font-bold text-primary-foreground">
-                  Swami Guneshananda
+                  Swami Guneshananda Ji
                 </h3>
                 <p className="text-xs text-primary-foreground/50">Maharaj</p>
               </div>
@@ -120,7 +120,7 @@ const Footer = () => {
         </div>
 
         <div className="text-center text-xs text-primary-foreground/40">
-          © 2024 Swami Guneshananda Maharaj. All rights reserved.
+          © 2024 Swami Guneshananda Ji Maharaj. All rights reserved.
         </div>
       </div>
     </footer>
