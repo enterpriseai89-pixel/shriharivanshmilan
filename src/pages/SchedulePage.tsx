@@ -6,6 +6,9 @@ import { MapPin, Clock, Calendar, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import CinematicPageHero from "@/components/CinematicPageHero";
+import CinematicSection from "@/components/CinematicSection";
+import scheduleBg from "@/assets/schedule-bg.jpg";
 
 interface ScheduleEvent {
   id: string;
@@ -35,28 +38,21 @@ const SchedulePage = () => {
 
   return (
     <PageTransition>
-    <div className="min-h-screen">
-      <Navbar />
+      <div className="min-h-screen bg-background">
+        <Navbar />
 
-      <section className="pt-28 pb-16 bg-hero-gradient relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
-          <AnimatedSection>
-            <h1 className="text-4xl md:text-6xl font-heading font-bold text-center">
-              Event <span className="text-gradient-saffron">Schedule</span>
-            </h1>
-            <p className="text-center text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-              Join us for transformative spiritual experiences in Vrindavan
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
+        <CinematicPageHero
+          image={scheduleBg}
+          title="Event"
+          highlight="Schedule"
+          subtitle="Follow the upcoming darshan of kathas, gatherings, and sacred moments with Swami Guneshananda Ji."
+        />
 
-      <section className="py-24 bg-card">
-        <div className="container mx-auto px-4">
+        <CinematicSection image={scheduleBg} className="pt-0">
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-background rounded-3xl p-8 animate-pulse">
+                <div key={i} className="bg-card/70 backdrop-blur-md rounded-3xl p-8 animate-pulse shadow-lg">
                   <div className="h-4 bg-muted rounded w-1/2 mb-4" />
                   <div className="h-6 bg-muted rounded w-3/4 mb-3" />
                   <div className="h-4 bg-muted rounded w-full" />
@@ -88,7 +84,7 @@ const SchedulePage = () => {
                   <motion.div
                     whileHover={{ y: -6, scale: 1.02 }}
                     transition={{ duration: 0.3 }}
-                    className="bg-background rounded-3xl p-8 border border-border/30 hover:shadow-xl transition-shadow relative overflow-hidden group"
+                      className="bg-card/75 backdrop-blur-md rounded-3xl p-8 border border-border/30 hover:shadow-xl transition-shadow relative overflow-hidden group"
                   >
                     <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-3xl" />
                     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-5">
@@ -119,11 +115,10 @@ const SchedulePage = () => {
               ))}
             </div>
           )}
-        </div>
-      </section>
+        </CinematicSection>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </PageTransition>
   );
 };
