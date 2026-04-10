@@ -7,28 +7,24 @@ import { motion } from "framer-motion";
 import vrindavanImg from "@/assets/vrindavan-temple.jpg";
 import templeTimeImg from "@/assets/temple-time.jpg";
 import prayerImg from "@/assets/prayer-hands.jpg";
+import CinematicPageHero from "@/components/CinematicPageHero";
+import CinematicSection from "@/components/CinematicSection";
+import contactBg from "@/assets/contact-bg.jpg";
 
 const ContactPage = () => {
   return (
     <PageTransition>
-    <div className="min-h-screen">
-      <Navbar />
+      <div className="min-h-screen bg-background">
+        <Navbar />
 
-      <section className="pt-28 pb-24 bg-hero-gradient">
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <h1 className="text-4xl md:text-6xl font-heading font-bold text-center">
-              Get In <span className="text-gradient-saffron">Touch</span>
-            </h1>
-            <p className="text-center text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-              Connect with us for spiritual guidance, event information, or to schedule your personal Bhagavat Katha session
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
+        <CinematicPageHero
+          image={contactBg}
+          title="Connect with"
+          highlight="Swami Guneshananda Ji"
+          subtitle="Reach out for spiritual guidance, event details, and personal Bhagavat Katha bookings in a warm, devotional setting."
+        />
 
-      <section className="py-24 bg-card">
-        <div className="container mx-auto px-4">
+        <CinematicSection image={contactBg} className="pt-0">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
@@ -54,7 +50,7 @@ const ContactPage = () => {
               <AnimatedSection key={item.title} delay={i * 0.1}>
                 <motion.div
                   whileHover={{ y: -6 }}
-                  className="bg-background rounded-3xl overflow-hidden border border-border/30 shadow-lg h-full"
+                  className="bg-card/75 backdrop-blur-md rounded-3xl overflow-hidden border border-border/30 shadow-xl h-full"
                 >
                   <div className="relative h-44 overflow-hidden">
                     <img
@@ -102,17 +98,16 @@ const ContactPage = () => {
               href="http://www.youtube.com/@GuneshanandaMilan"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-primary font-semibold text-lg hover:underline"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-card/60 px-6 py-3 text-primary font-semibold text-lg backdrop-blur-md hover:bg-card/80 transition-colors"
             >
               <Youtube className="w-6 h-6" />
               Subscribe to YouTube Channel
             </a>
           </AnimatedSection>
-        </div>
-      </section>
+        </CinematicSection>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
     </PageTransition>
   );
 };

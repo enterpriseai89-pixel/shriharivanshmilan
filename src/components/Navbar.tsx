@@ -42,8 +42,8 @@ const Navbar = () => {
             <span className="text-lg">🕉️</span>
           </div>
           <div>
-            <h2 className="font-heading text-lg font-bold text-primary leading-tight">
-              Guneshananda Ji
+            <h2 className="font-heading text-sm md:text-base font-bold text-primary leading-tight">
+              Swami Guneshananda Ji
             </h2>
             <p className="text-xs text-muted-foreground">Maharaj</p>
           </div>

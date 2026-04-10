@@ -1,15 +1,8 @@
-import { useLocation, Link } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
-
   return (
     <PageTransition>
       <div className="flex min-h-screen items-center justify-center bg-hero-gradient relative overflow-hidden">
@@ -39,7 +32,7 @@ const NotFound = () => {
             transition={{ delay: 0.5 }}
             className="mb-8 text-muted-foreground"
           >
-            The path you seek leads elsewhere, dear soul
+            Let us gently guide you back to Swami Guneshananda Ji’s main page.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}

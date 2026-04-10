@@ -13,6 +13,15 @@ import ContactPage from "./pages/ContactPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 
+if (typeof window !== "undefined") {
+  const params = new URLSearchParams(window.location.search);
+  const redirectPath = params.get("redirect");
+
+  if (redirectPath?.startsWith("/")) {
+    window.history.replaceState(null, "", redirectPath);
+  }
+}
+
 const queryClient = new QueryClient();
 
 const AnimatedRoutes = () => {

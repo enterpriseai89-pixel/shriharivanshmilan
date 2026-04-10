@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting…</title>
+    <script>
+      (function () {
+        var path = window.location.pathname + window.location.search + window.location.hash;
+        if (!path || path === "/" || path === "/404.html") {
+          window.location.replace("/");
+          return;
+        }
+        window.location.replace("/?redirect=" + encodeURIComponent(path));
+      })();
+    </script>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: system-ui, sans-serif;
+        background: linear-gradient(135deg, #2b1609, #140f0c);
+        color: #fff4e7;
+      }
+      p {
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Redirecting you back to the site…</p>
+  </body>
+</html>

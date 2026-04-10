@@ -83,9 +83,7 @@ const HeroSection = () => {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold leading-tight"
             >
-              <span className="text-gradient-saffron">Swami</span>
-              <br />
-              <span className="text-gradient-saffron">Guneshananda Ji</span>
+              <span className="text-gradient-saffron">Swami Guneshananda Ji</span>
               <br />
               <span className="text-foreground/80">Maharaj</span>
             </motion.h1>
