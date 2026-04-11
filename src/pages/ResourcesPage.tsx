@@ -2,10 +2,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedSection from "@/components/AnimatedSection";
 import PageTransition from "@/components/PageTransition";
+import CinematicPageHero from "@/components/CinematicPageHero";
+import CinematicSection from "@/components/CinematicSection";
 import { FileText, Video, Music, ExternalLink, Play, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import resourcesBg from "@/assets/resources-bg.jpg";
 
 interface Resource {
   id: string;
@@ -52,25 +55,19 @@ const ResourcesPage = () => {
     <div className="min-h-screen">
       <Navbar />
 
-      <section className="pt-28 pb-16 bg-hero-gradient">
-        <div className="container mx-auto px-4">
-          <AnimatedSection>
-            <h1 className="text-4xl md:text-6xl font-heading font-bold text-center">
-              Spiritual <span className="text-gradient-saffron">Resources</span>
-            </h1>
-            <p className="text-center text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-              Downloadable content, videos, and audio to deepen your spiritual practice
-            </p>
-          </AnimatedSection>
-        </div>
-      </section>
+      <CinematicPageHero
+        image={resourcesBg}
+        title="Spiritual"
+        highlight="Resources"
+        subtitle="Downloadable content, videos, and audio to deepen your spiritual practice with Swami Guneshananda Ji"
+      />
 
-      <section className="py-24 bg-card">
+      <CinematicSection image={resourcesBg} className="py-24">
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-background rounded-3xl p-8 animate-pulse">
+                <div key={i} className="bg-background/60 backdrop-blur-sm rounded-3xl p-8 animate-pulse border border-border/20">
                   <div className="h-4 bg-muted rounded w-1/2 mb-4" />
                   <div className="h-6 bg-muted rounded w-3/4 mb-3" />
                   <div className="h-4 bg-muted rounded w-full" />
@@ -85,11 +82,11 @@ const ResourcesPage = () => {
                   transition={{ duration: 3, repeat: Infinity }}
                   className="inline-block mb-6"
                 >
-                  <div className="w-24 h-24 rounded-full bg-primary/5 flex items-center justify-center mx-auto">
-                    <Sparkles className="w-10 h-10 text-primary/40" />
+                  <div className="w-24 h-24 rounded-full bg-primary/10 backdrop-blur-sm flex items-center justify-center mx-auto">
+                    <Sparkles className="w-10 h-10 text-primary/60" />
                   </div>
                 </motion.div>
-                <h3 className="text-2xl font-heading font-bold text-foreground/60 mb-3">No Resources Available Yet</h3>
+                <h3 className="text-2xl font-heading font-bold text-foreground/70 mb-3">No Resources Available Yet</h3>
                 <p className="text-muted-foreground max-w-md mx-auto">
                   Spiritual videos, PDFs, and audio content will appear here once added by the admin. Check back soon!
                 </p>
@@ -102,10 +99,10 @@ const ResourcesPage = () => {
                   <button
                     key={t}
                     onClick={() => setFilter(t)}
-                    className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm ${
                       filter === t
                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                        : "bg-background text-muted-foreground hover:text-primary hover:bg-primary/5 border border-border/30"
+                        : "bg-background/60 text-muted-foreground hover:text-primary hover:bg-primary/10 border border-border/30"
                     }`}
                   >
                     {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1) + "s"}
@@ -122,9 +119,9 @@ const ResourcesPage = () => {
                   return (
                     <AnimatedSection key={resource.id} delay={i * 0.08}>
                       <motion.div
-                        whileHover={{ y: -6 }}
+                        whileHover={{ y: -6, scale: 1.02 }}
                         transition={{ duration: 0.3 }}
-                        className="bg-background rounded-3xl overflow-hidden border border-border/30 shadow-lg group"
+                        className="bg-background/70 backdrop-blur-md rounded-3xl overflow-hidden border border-border/30 shadow-lg group"
                       >
                         {ytId ? (
                           <div className="relative aspect-video bg-dark-navy">
@@ -172,7 +169,7 @@ const ResourcesPage = () => {
             </>
           )}
         </div>
-      </section>
+      </CinematicSection>
 
       <Footer />
     </div>
