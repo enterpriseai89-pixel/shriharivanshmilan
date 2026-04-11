@@ -2,12 +2,16 @@ import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
+import CinematicPageHero from "@/components/CinematicPageHero";
+import CinematicSection from "@/components/CinematicSection";
 import { supabase } from "@/integrations/supabase/client";
 import { Plus, Trash2, Edit2, LogIn, LogOut, Calendar, FileText, Video, Music, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+import adminBg from "@/assets/admin-bg.jpg";
 
 const ADMIN_PASSWORD = "RadheKrishna108";
 
@@ -47,26 +51,21 @@ const AdminPage = () => {
   const [activeTab, setActiveTab] = useState<"katha" | "resources" | "schedules">("katha");
   const { toast } = useToast();
 
-  // Katha state
   const [kathas, setKathas] = useState<KathaBooking[]>([]);
   const [kathaForm, setKathaForm] = useState({ title: "", description: "", event_date: "", location: "Vrindavan, Uttar Pradesh", status: "upcoming" });
   const [editingKatha, setEditingKatha] = useState<string | null>(null);
 
-  // Resource state
   const [resources, setResources] = useState<Resource[]>([]);
   const [resourceForm, setResourceForm] = useState({ title: "", description: "", type: "pdf", url: "" });
   const [editingResource, setEditingResource] = useState<string | null>(null);
 
-  // Schedule state
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [scheduleForm, setScheduleForm] = useState({ title: "", description: "", event_date: "", time_slot: "", location: "Vrindavan, Uttar Pradesh", status: "upcoming" });
   const [editingSchedule, setEditingSchedule] = useState<string | null>(null);
 
   useEffect(() => {
     const stored = sessionStorage.getItem("admin_auth");
-    if (stored === "true") {
-      setLocalAuth(true);
-    }
+    if (stored === "true") setLocalAuth(true);
     
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -133,7 +132,6 @@ const AdminPage = () => {
     if (data) setSchedules(data as Schedule[]);
   };
 
-  // Katha CRUD
   const saveKatha = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingKatha) {
@@ -160,7 +158,6 @@ const AdminPage = () => {
     setEditingKatha(k.id);
   };
 
-  // Resource CRUD
   const saveResource = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingResource) {
@@ -187,7 +184,6 @@ const AdminPage = () => {
     setEditingResource(r.id);
   };
 
-  // Schedule CRUD
   const saveSchedule = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingSchedule) {
@@ -225,34 +221,50 @@ const AdminPage = () => {
 
   if (!isAuthed) {
     return (
+      <PageTransition>
       <div className="min-h-screen">
         <Navbar />
-        <div className="pt-28 pb-24 flex items-center justify-center min-h-[70vh]">
-          <div className="bg-card rounded-3xl p-10 border border-border/30 shadow-2xl w-full max-w-sm">
-            <div className="text-center mb-8">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                <LogIn className="w-8 h-8 text-primary" />
+        <CinematicPageHero
+          image={adminBg}
+          title="Admin"
+          highlight="Panel"
+          subtitle="Manage the spiritual content of Swami Guneshananda Ji's divine platform"
+          eyebrow="Swami Guneshananda Ji"
+        />
+        <CinematicSection image={adminBg} className="py-24">
+          <div className="flex items-center justify-center min-h-[40vh]">
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="bg-card/80 backdrop-blur-xl rounded-3xl p-10 border border-border/30 shadow-2xl w-full max-w-sm"
+            >
+              <div className="text-center mb-8">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <LogIn className="w-8 h-8 text-primary" />
+                </div>
+                <h1 className="text-2xl font-heading font-bold text-foreground">Admin Access</h1>
+                <p className="text-muted-foreground mt-2 text-sm">Enter password to continue</p>
               </div>
-              <h1 className="text-2xl font-heading font-bold text-foreground">Admin Access</h1>
-              <p className="text-muted-foreground mt-2 text-sm">Enter password to continue</p>
-            </div>
-            <form onSubmit={handlePasswordLogin} className="space-y-4">
-              <Input
-                type="password"
-                placeholder="Enter admin password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="text-center text-lg tracking-widest"
-              />
-              <Button type="submit" className="w-full bg-cta-gradient hover:opacity-90 rounded-full">
-                Enter 🙏
-              </Button>
-            </form>
+              <form onSubmit={handlePasswordLogin} className="space-y-4">
+                <Input
+                  type="password"
+                  placeholder="Enter admin password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="text-center text-lg tracking-widest"
+                />
+                <Button type="submit" className="w-full bg-cta-gradient hover:opacity-90 rounded-full">
+                  Enter 🙏
+                </Button>
+              </form>
+            </motion.div>
           </div>
-        </div>
+        </CinematicSection>
         <Footer />
       </div>
+      </PageTransition>
     );
   }
 
@@ -260,18 +272,25 @@ const AdminPage = () => {
     <PageTransition>
     <div className="min-h-screen bg-background">
       <Navbar />
-      <div className="pt-28 pb-24">
+      <CinematicPageHero
+        image={adminBg}
+        title="Admin"
+        highlight="Panel"
+        subtitle="Manage divine content for Swami Guneshananda Ji's spiritual platform"
+        eyebrow="Swami Guneshananda Ji"
+      />
+
+      <CinematicSection image={adminBg} className="py-16">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-foreground">
-              Admin <span className="text-gradient-saffron">Panel</span>
-            </h1>
-            <Button onClick={handleLogout} variant="outline" className="rounded-full" size="sm">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
+              Content <span className="text-gradient-saffron">Manager</span>
+            </h2>
+            <Button onClick={handleLogout} variant="outline" className="rounded-full backdrop-blur-sm" size="sm">
               <LogOut className="w-4 h-4 mr-2" /> Sign Out
             </Button>
           </div>
 
-          {/* Tabs */}
           <div className="flex gap-2 mb-8 flex-wrap">
             {[
               { key: "katha" as const, icon: Calendar, label: "Katha Bookings" },
@@ -281,10 +300,10 @@ const AdminPage = () => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all backdrop-blur-sm ${
                   activeTab === tab.key
-                    ? "bg-primary text-primary-foreground shadow-lg"
-                    : "bg-card text-muted-foreground hover:text-primary border border-border/30"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
+                    : "bg-card/60 text-muted-foreground hover:text-primary border border-border/30"
                 }`}
               >
                 <tab.icon className="w-4 h-4" />
@@ -296,7 +315,12 @@ const AdminPage = () => {
           {activeTab === "katha" && (
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-1">
-                <form onSubmit={saveKatha} className="bg-card rounded-3xl p-6 border border-border/30 shadow-lg space-y-4">
+                <motion.form
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  onSubmit={saveKatha}
+                  className="bg-card/70 backdrop-blur-xl rounded-3xl p-6 border border-border/30 shadow-lg space-y-4"
+                >
                   <h2 className="font-heading font-bold text-lg text-foreground">
                     {editingKatha ? "Edit Katha" : "Add New Katha"}
                   </h2>
@@ -319,13 +343,19 @@ const AdminPage = () => {
                       </Button>
                     )}
                   </div>
-                </form>
+                </motion.form>
               </div>
               <div className="lg:col-span-2 space-y-4">
                 {kathas.length === 0 ? (
                   <div className="text-center py-16 text-muted-foreground">No kathas yet. Add your first one!</div>
-                ) : kathas.map((k) => (
-                  <div key={k.id} className="bg-card rounded-2xl p-5 border border-border/30 flex items-center justify-between gap-4">
+                ) : kathas.map((k, i) => (
+                  <motion.div
+                    key={k.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="bg-card/70 backdrop-blur-md rounded-2xl p-5 border border-border/30 flex items-center justify-between gap-4"
+                  >
                     <div className="flex-1 min-w-0">
                       <h3 className="font-heading font-bold text-foreground truncate">{k.title}</h3>
                       <p className="text-sm text-muted-foreground">{k.location} · {new Date(k.event_date).toLocaleDateString()}</p>
@@ -335,7 +365,7 @@ const AdminPage = () => {
                       <Button size="icon" variant="ghost" onClick={() => editKatha(k)}><Edit2 className="w-4 h-4" /></Button>
                       <Button size="icon" variant="ghost" onClick={() => deleteKatha(k.id)} className="text-destructive hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -344,7 +374,12 @@ const AdminPage = () => {
           {activeTab === "resources" && (
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-1">
-                <form onSubmit={saveResource} className="bg-card rounded-3xl p-6 border border-border/30 shadow-lg space-y-4">
+                <motion.form
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  onSubmit={saveResource}
+                  className="bg-card/70 backdrop-blur-xl rounded-3xl p-6 border border-border/30 shadow-lg space-y-4"
+                >
                   <h2 className="font-heading font-bold text-lg text-foreground">
                     {editingResource ? "Edit Resource" : "Add New Resource"}
                   </h2>
@@ -366,30 +401,35 @@ const AdminPage = () => {
                       </Button>
                     )}
                   </div>
-                </form>
+                </motion.form>
               </div>
               <div className="lg:col-span-2 space-y-4">
                 {resources.length === 0 ? (
                   <div className="text-center py-16 text-muted-foreground">No resources yet. Add your first one!</div>
-                ) : resources.map((r) => {
+                ) : resources.map((r, i) => {
                   const Icon = r.type === "video" ? Video : r.type === "audio" ? Music : FileText;
                   return (
-                    <div key={r.id} className="bg-card rounded-2xl p-5 border border-border/30 flex items-center justify-between gap-4">
+                    <motion.div
+                      key={r.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="bg-card/70 backdrop-blur-md rounded-2xl p-5 border border-border/30 flex items-center justify-between gap-4"
+                    >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                           <Icon className="w-5 h-5 text-primary" />
                         </div>
                         <div className="min-w-0">
                           <h3 className="font-heading font-bold text-foreground truncate">{r.title}</h3>
-                          <p className="text-xs text-muted-foreground truncate">{r.url}</p>
+                          <p className="text-sm text-muted-foreground truncate">{r.type.toUpperCase()} · {r.url.substring(0, 40)}...</p>
                         </div>
                       </div>
-                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-primary/10 text-primary shrink-0">{r.type.toUpperCase()}</span>
                       <div className="flex gap-1 shrink-0">
                         <Button size="icon" variant="ghost" onClick={() => editResource(r)}><Edit2 className="w-4 h-4" /></Button>
                         <Button size="icon" variant="ghost" onClick={() => deleteResource(r.id)} className="text-destructive hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
                       </div>
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -399,14 +439,19 @@ const AdminPage = () => {
           {activeTab === "schedules" && (
             <div className="grid lg:grid-cols-3 gap-8">
               <div className="lg:col-span-1">
-                <form onSubmit={saveSchedule} className="bg-card rounded-3xl p-6 border border-border/30 shadow-lg space-y-4">
+                <motion.form
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  onSubmit={saveSchedule}
+                  className="bg-card/70 backdrop-blur-xl rounded-3xl p-6 border border-border/30 shadow-lg space-y-4"
+                >
                   <h2 className="font-heading font-bold text-lg text-foreground">
                     {editingSchedule ? "Edit Schedule" : "Add New Schedule"}
                   </h2>
                   <Input placeholder="Title" value={scheduleForm.title} onChange={(e) => setScheduleForm({ ...scheduleForm, title: e.target.value })} required />
                   <Textarea placeholder="Description" value={scheduleForm.description} onChange={(e) => setScheduleForm({ ...scheduleForm, description: e.target.value })} />
                   <Input type="date" value={scheduleForm.event_date} onChange={(e) => setScheduleForm({ ...scheduleForm, event_date: e.target.value })} required />
-                  <Input placeholder="Time (e.g. 6:00 AM - 8:00 AM)" value={scheduleForm.time_slot} onChange={(e) => setScheduleForm({ ...scheduleForm, time_slot: e.target.value })} />
+                  <Input placeholder="Time slot (e.g. 6:00 AM - 8:00 AM)" value={scheduleForm.time_slot} onChange={(e) => setScheduleForm({ ...scheduleForm, time_slot: e.target.value })} />
                   <Input placeholder="Location" value={scheduleForm.location} onChange={(e) => setScheduleForm({ ...scheduleForm, location: e.target.value })} required />
                   <select value={scheduleForm.status} onChange={(e) => setScheduleForm({ ...scheduleForm, status: e.target.value })} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
                     <option value="upcoming">Upcoming</option>
@@ -423,29 +468,36 @@ const AdminPage = () => {
                       </Button>
                     )}
                   </div>
-                </form>
+                </motion.form>
               </div>
               <div className="lg:col-span-2 space-y-4">
                 {schedules.length === 0 ? (
                   <div className="text-center py-16 text-muted-foreground">No schedules yet. Add your first one!</div>
-                ) : schedules.map((s) => (
-                  <div key={s.id} className="bg-card rounded-2xl p-5 border border-border/30 flex items-center justify-between gap-4">
+                ) : schedules.map((s, i) => (
+                  <motion.div
+                    key={s.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="bg-card/70 backdrop-blur-md rounded-2xl p-5 border border-border/30 flex items-center justify-between gap-4"
+                  >
                     <div className="flex-1 min-w-0">
                       <h3 className="font-heading font-bold text-foreground truncate">{s.title}</h3>
-                      <p className="text-sm text-muted-foreground">{s.location} · {new Date(s.event_date).toLocaleDateString()}{s.time_slot ? ` · ${s.time_slot}` : ""}</p>
+                      <p className="text-sm text-muted-foreground">{s.location} · {new Date(s.event_date).toLocaleDateString()} {s.time_slot && `· ${s.time_slot}`}</p>
                     </div>
                     <span className={`text-xs font-semibold px-3 py-1 rounded-full shrink-0 ${s.status === "upcoming" ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>{s.status}</span>
                     <div className="flex gap-1 shrink-0">
                       <Button size="icon" variant="ghost" onClick={() => editSchedule(s)}><Edit2 className="w-4 h-4" /></Button>
                       <Button size="icon" variant="ghost" onClick={() => deleteSchedule(s.id)} className="text-destructive hover:text-destructive"><Trash2 className="w-4 h-4" /></Button>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
           )}
         </div>
-      </div>
+      </CinematicSection>
+
       <Footer />
     </div>
     </PageTransition>
