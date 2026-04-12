@@ -12,6 +12,7 @@ import ResourcesPage from "./pages/ResourcesPage";
 import ContactPage from "./pages/ContactPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
+import AIChatAssistant from "./components/AIChatAssistant";
 
 if (typeof window !== "undefined") {
   const params = new URLSearchParams(window.location.search);
@@ -50,6 +51,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AnimatedRoutes />
+        <AIChatAssistant />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
