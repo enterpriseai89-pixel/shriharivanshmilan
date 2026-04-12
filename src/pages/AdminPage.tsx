@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
 import CinematicPageHero from "@/components/CinematicPageHero";
 import CinematicSection from "@/components/CinematicSection";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Trash2, Edit2, LogIn, LogOut, Calendar, FileText, Video, Music, Clock } from "lucide-react";
+import { Plus, Trash2, Edit2, LogIn, LogOut, Calendar, FileText, Video, Music, Clock, Upload, IndianRupee, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -58,6 +58,9 @@ const AdminPage = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [resourceForm, setResourceForm] = useState({ title: "", description: "", type: "pdf", url: "" });
   const [editingResource, setEditingResource] = useState<string | null>(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [scheduleForm, setScheduleForm] = useState({ title: "", description: "", event_date: "", time_slot: "", location: "Vrindavan, Uttar Pradesh", status: "upcoming" });
@@ -132,6 +135,52 @@ const AdminPage = () => {
     if (data) setSchedules(data as Schedule[]);
   };
 
+  // PDF File Upload handler
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    const maxSize = 20 * 1024 * 1024; // 20MB
+    if (file.size > maxSize) {
+      toast({ title: "File too large", description: "Maximum file size is 20MB", variant: "destructive" });
+      return;
+    }
+
+    const allowedTypes = ["application/pdf"];
+    if (!allowedTypes.includes(file.type)) {
+      toast({ title: "Invalid file type", description: "Only PDF files are allowed", variant: "destructive" });
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
+  const uploadFileToStorage = async (): Promise<string | null> => {
+    if (!selectedFile) return null;
+    setUploadingFile(true);
+
+    const fileExt = selectedFile.name.split(".").pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `pdfs/${fileName}`;
+
+    const { error } = await supabase.storage
+      .from("resources-files")
+      .upload(filePath, selectedFile, { contentType: selectedFile.type });
+
+    if (error) {
+      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+      setUploadingFile(false);
+      return null;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from("resources-files")
+      .getPublicUrl(filePath);
+
+    setUploadingFile(false);
+    return urlData.publicUrl;
+  };
+
   const saveKatha = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingKatha) {
@@ -160,16 +209,35 @@ const AdminPage = () => {
 
   const saveResource = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    let finalUrl = resourceForm.url;
+
+    // If a PDF file is selected, upload it first
+    if (selectedFile && resourceForm.type === "pdf") {
+      const uploadedUrl = await uploadFileToStorage();
+      if (!uploadedUrl) return; // upload failed
+      finalUrl = uploadedUrl;
+    }
+
+    if (!finalUrl && !selectedFile) {
+      toast({ title: "Please provide a URL or upload a file", variant: "destructive" });
+      return;
+    }
+
+    const payload = { ...resourceForm, url: finalUrl };
+
     if (editingResource) {
-      const { error } = await supabase.from("resources").update(resourceForm).eq("id", editingResource);
+      const { error } = await supabase.from("resources").update(payload).eq("id", editingResource);
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
       toast({ title: "Resource updated ✅" });
     } else {
-      const { error } = await supabase.from("resources").insert(resourceForm);
+      const { error } = await supabase.from("resources").insert(payload);
       if (error) { toast({ title: "Error", description: error.message, variant: "destructive" }); return; }
       toast({ title: "Resource added ✅" });
     }
     setResourceForm({ title: "", description: "", type: "pdf", url: "" });
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setEditingResource(null);
     fetchResources();
   };
@@ -385,18 +453,71 @@ const AdminPage = () => {
                   </h2>
                   <Input placeholder="Title" value={resourceForm.title} onChange={(e) => setResourceForm({ ...resourceForm, title: e.target.value })} required />
                   <Textarea placeholder="Description" value={resourceForm.description} onChange={(e) => setResourceForm({ ...resourceForm, description: e.target.value })} />
-                  <select value={resourceForm.type} onChange={(e) => setResourceForm({ ...resourceForm, type: e.target.value })} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
+                  <select value={resourceForm.type} onChange={(e) => { setResourceForm({ ...resourceForm, type: e.target.value }); setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }} className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm">
                     <option value="pdf">PDF</option>
                     <option value="video">Video</option>
                     <option value="audio">Audio</option>
                   </select>
-                  <Input placeholder="URL (YouTube or PDF link)" value={resourceForm.url} onChange={(e) => setResourceForm({ ...resourceForm, url: e.target.value })} required />
+
+                  {/* PDF File Upload Section */}
+                  {resourceForm.type === "pdf" && (
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-foreground">Upload PDF from device</label>
+                      <div 
+                        className="border-2 border-dashed border-border/50 rounded-2xl p-4 text-center cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept=".pdf,application/pdf"
+                          onChange={handleFileSelect}
+                          className="hidden"
+                        />
+                        {selectedFile ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <FileText className="w-5 h-5 text-primary" />
+                            <span className="text-sm text-foreground font-medium truncate max-w-[200px]">{selectedFile.name}</span>
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+                              className="text-muted-foreground hover:text-destructive"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="space-y-1">
+                            <Upload className="w-8 h-8 text-muted-foreground mx-auto" />
+                            <p className="text-sm text-muted-foreground">Tap to select PDF from your device</p>
+                            <p className="text-xs text-muted-foreground/60">Max 20MB</p>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-px bg-border/30" />
+                        <span className="text-xs text-muted-foreground">OR paste URL</span>
+                        <div className="flex-1 h-px bg-border/30" />
+                      </div>
+                    </div>
+                  )}
+
+                  <Input
+                    placeholder={resourceForm.type === "pdf" ? "PDF URL (optional if uploading)" : "URL (YouTube or audio link)"}
+                    value={resourceForm.url}
+                    onChange={(e) => setResourceForm({ ...resourceForm, url: e.target.value })}
+                    required={!selectedFile}
+                  />
                   <div className="flex gap-2">
-                    <Button type="submit" className="flex-1 bg-cta-gradient rounded-full">
-                      <Plus className="w-4 h-4 mr-1" /> {editingResource ? "Update" : "Add"}
+                    <Button type="submit" className="flex-1 bg-cta-gradient rounded-full" disabled={uploadingFile}>
+                      {uploadingFile ? (
+                        <><div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin mr-2" /> Uploading...</>
+                      ) : (
+                        <><Plus className="w-4 h-4 mr-1" /> {editingResource ? "Update" : "Add"}</>
+                      )}
                     </Button>
                     {editingResource && (
-                      <Button type="button" variant="outline" className="rounded-full" onClick={() => { setEditingResource(null); setResourceForm({ title: "", description: "", type: "pdf", url: "" }); }}>
+                      <Button type="button" variant="outline" className="rounded-full" onClick={() => { setEditingResource(null); setResourceForm({ title: "", description: "", type: "pdf", url: "" }); setSelectedFile(null); if (fileInputRef.current) fileInputRef.current.value = ""; }}>
                         Cancel
                       </Button>
                     )}
