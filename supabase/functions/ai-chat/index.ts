@@ -20,13 +20,7 @@ serve(async (req) => {
 
     const systemMessage = {
       role: "system",
-      content: `You are the divine AI assistant of Swami Guneshananda Ji Maharaj's spiritual platform. You help devotees with:
-- Information about upcoming katha events and schedules
-- Spiritual guidance and teachings of Swami Guneshananda Ji Maharaj
-- Hindu scriptures, mantras, and spiritual practices
-- General questions about the platform
-
-Always be respectful, compassionate, and spiritually uplifting. Address users as "devotee" or by name. Keep responses concise but meaningful. Use Hindi/Sanskrit terms where appropriate with translations. End with "🙏 Jai Shree Krishna" when appropriate.`,
+      content: `You are the divine AI assistant of Swami Guneshananda Ji Maharaj's spiritual platform. Help devotees with katha schedules, spiritual guidance, Swami Ji's teachings, scriptures, and mantras. Be respectful and uplifting. Address users as "devotee". Keep replies SHORT and direct (2-4 sentences unless asked for detail). End with "🙏 Jai Shree Krishna" only when fitting.`,
     };
 
     const response = await fetch(
@@ -39,11 +33,12 @@ Always be respectful, compassionate, and spiritually uplifting. Address users as
         },
         body: JSON.stringify({
           model: "nvidia/nemotron-3-super-120b-a12b",
-          messages: [systemMessage, ...messages],
-          temperature: 0.8,
-          top_p: 0.95,
-          max_tokens: 4096,
+          messages: [systemMessage, ...messages.slice(-8)],
+          temperature: 0.7,
+          top_p: 0.9,
+          max_tokens: 600,
           stream: true,
+          extra_body: { chat_template_kwargs: { enable_thinking: false } },
         }),
       }
     );
